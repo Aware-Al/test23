@@ -1,0 +1,42 @@
+name: Build and Publish .NET Project
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # Или 'windows-latest', если используете Windows
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v2
+        with:
+          dotnet-version: '8.0' # Укажите вашу версию .NET
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build project
+        run: dotnet build -c Release
+
+      - name: Publish project
+        run: dotnet publish -c Release -r win-x64 --self-contained
+        # Для Linux: -r linux-x64
+
+      - name: Upload published files as an artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: published-files
+          path: bin/Release/net8.0/win-x64/publish/  # Путь для Windows или Linux
+
+        run: |
+          echo Add other actions to build,
+          echo test, and deploy your project.
