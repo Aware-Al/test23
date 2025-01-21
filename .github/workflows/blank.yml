@@ -10,33 +10,28 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest # Или 'windows-latest', если используете Windows
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2  # Используем GitHub Action для клонирования репозитория
 
       - name: Set up .NET
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v2  # Используем GitHub Action для установки .NET
         with:
-          dotnet-version: '8.0' # Укажите вашу версию .NET
+          dotnet-version: '8.0'  # Укажите нужную версию .NET
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: dotnet restore  # Запускаем команду для восстановления зависимостей
 
       - name: Build project
-        run: dotnet build -c Release
+        run: dotnet build -c Release  # Запускаем команду для сборки проекта
 
       - name: Publish project
-        run: dotnet publish -c Release -r win-x64 --self-contained
-        # Для Linux: -r linux-x64
+        run: dotnet publish -c Release -r win-x64 --self-contained  # Запускаем команду для публикации проекта
 
       - name: Upload published files as an artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v2  # Используем GitHub Action для загрузки артефактов
         with:
           name: published-files
-          path: bin/Release/net8.0/win-x64/publish/  # Путь для Windows или Linux
-
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          path: bin/Release/net8.0/win-x64/publish/  # Указываем путь к опубликованным файлам
